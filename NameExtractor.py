@@ -3,14 +3,11 @@ Crawled from https://shadima.com/%D8%A7%D8%B3%D9%85-%D9%BE%D8%B3%D8%B1/
 Thanks!!
 """
 
-# Open the file
 with open('Girls.txt', 'r', encoding='utf-8') as f:
     text = f.read()
 
-# Remove all spaces from the text while keeping the tabs
 new_text = text.replace(' ', '')
 
-# Write the new text back to the file
 with open('Modified_Girls.txt', 'w', encoding='utf-8') as f:
     f.write(new_text)
 with open('Modified_Girls.txt', 'r', encoding='utf-8') as f:
@@ -18,7 +15,6 @@ with open('Modified_Girls.txt', 'r', encoding='utf-8') as f:
 with open('Boys.txt', 'r', encoding='utf-8') as f:
     lines_men = f.readlines()
 
-# Extract the first word from each line
 words_men = [line.split("\t")[0] for line in lines_men]
 words_women = [line.split("\t")[0] for line in lines_women]
 

@@ -61,10 +61,10 @@ you_prounoun=['تو','برو','بکن','بخر','بده']
 words = text.split()
 if not full_names:
     for word in words:
-        if word.lower() in me_prounoun:
+        if word in me_prounoun:
             full_names.append("گوینده")
             break
-        if word.lower() in you_prounoun:
+        if word in you_prounoun:
             full_names.append("شنونده")
             break
 if not full_names:

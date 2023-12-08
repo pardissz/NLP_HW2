@@ -1,7 +1,8 @@
 """
 Crawled from https://shadima.com/%D8%A7%D8%B3%D9%85-%D9%BE%D8%B3%D8%B1/
 Thanks!!
-"""
+
+
 
 with open('Girls.txt', 'r', encoding='utf-8') as f:
     text = f.read()
@@ -10,6 +11,7 @@ new_text = text.replace(' ', '')
 
 with open('Modified_Girls.txt', 'w', encoding='utf-8') as f:
     f.write(new_text)
+"""
 with open('Modified_Girls.txt', 'r', encoding='utf-8') as f:
     lines_women = f.readlines()
 with open('Boys.txt', 'r', encoding='utf-8') as f:
@@ -55,7 +57,7 @@ def extract_names(text, women_names, men_names):
 
     return full_names
 text = "به المیرا و سوسن بگو آقای علی مردانی و دکتر پردیس مومنی و آقای مهندس فراهانی هم هستند. مهندس نیکبخت هم آمدند و آقای مهدی علیزاده چون خانم لویزانی هم زنگ زده بودند نتوانستند بیایند و خانم دکتر محبی هم خوب اند"
-text='هندونه خوشمزه است ها!'
+text="به مهندس امیربیگی بگو اسلاید ها تا 2 مهر باید تموم بشه "
 full_names=extract_names(text, words_women, words_men)
 me_prounoun=['من','می کنم','می‌کنم','می دهم','میدهم']
 you_prounoun=['تو','برو','بکن','بخر','بده']

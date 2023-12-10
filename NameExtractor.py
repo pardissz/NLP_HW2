@@ -1,7 +1,7 @@
-"""
+'''
 Crawled from https://shadima.com/%D8%A7%D8%B3%D9%85-%D9%BE%D8%B3%D8%B1/
 Thanks!!
-"""
+'''
 
 
 class NameExtractor:
@@ -14,8 +14,8 @@ class NameExtractor:
         with open('Boys.txt', 'r', encoding='utf-8') as f:
             self.lines_men = f.readlines()
 
-        self.words_men = [line.split("\t")[0] for line in self.lines_men]
-        self.words_women = [line.split("\t")[0] for line in self.lines_women]
+        self.words_men = [line.split('\t')[0] for line in self.lines_men]
+        self.words_women = [line.split('\t')[0] for line in self.lines_women]
 
     @staticmethod
     def extract_names(text, women_names, men_names):
@@ -54,24 +54,24 @@ class NameExtractor:
         if not full_names:
             for word in words:
                 if word in NameExtractor.me_pronoun:
-                    full_names.append("گوینده")
+                    full_names.append('گوینده')
                     break
                 if word in NameExtractor.you_pronoun:
-                    full_names.append("شنونده")
+                    full_names.append('شنونده')
                     break
         if not full_names:
-            full_names.append("نامعلوم")
+            full_names.append('نامعلوم')
 
         return full_names
 
 
 if __name__ == '__main__':
-    text = ("به المیرا و سوسن بگو آقای علی مردانی و دکتر پردیس مومنی و آقای مهندس فراهانی هم هستند. مهندس نیکبخت هم "
-            "آمدند و آقای مهدی علیزاده چون خانم لویزانی هم زنگ زده بودند نتوانستند بیایند و خانم دکتر محبی هم خوب اند")
+    text = ('به المیرا و سوسن بگو آقای علی مردانی و دکتر پردیس مومنی و آقای مهندس فراهانی هم هستند. مهندس نیکبخت هم '
+            'آمدند و آقای مهدی علیزاده چون خانم لویزانی هم زنگ زده بودند نتوانستند بیایند و خانم دکتر محبی هم خوب اند')
     name_extractor = NameExtractor()
     full_names = NameExtractor.extract_names(text, name_extractor.words_women, name_extractor.words_men)
     print(full_names)
 
-    text = "به مهندس امیربیگی بگو اسلاید ها تا 2 مهر باید تموم بشه "
+    text = 'به مهندس امیربیگی بگو اسلاید ها تا 2 مهر باید تموم بشه '
     full_names = NameExtractor.extract_names(text, name_extractor.words_women, name_extractor.words_men)
     print(full_names)

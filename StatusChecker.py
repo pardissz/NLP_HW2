@@ -18,10 +18,10 @@ class StatusChecker:
 
 
 if __name__ == '__main__':
-    text = "من حتما  میگم که تموم شده "
+    text = 'من حتما  میگم که تموم شده '
     is_done, is_urgent = StatusChecker.check_status(text)
     print(is_done, is_urgent)
 
-    text = "تسک به اتمام رسید"
+    text = 'تسک به اتمام رسید'
     is_done, is_urgent = StatusChecker.check_status(text)
     print(is_done, is_urgent)

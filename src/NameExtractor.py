@@ -21,7 +21,8 @@ class NameExtractor:
             r'(انجام دهنده|مسئول|افراد مسئول|مسئولیت).*?(کار|تسک)?.*?(منتقل شد|انتقال یافت|عوض شد|تغییر '
             r'کرد)?.*?به (.*?)(منتقل شد|انتقال یافت|عوض شد|تغییر کرد)')
 
-    def extract_names(self, text, women_names, men_names):
+    def extract_names(self, text):
+        women_names, men_names = self.words_women, self.words_men
         full_names = []
         words = text.split()
         women_prefixes = ['خانم', 'مهندس', 'دکتر', 'استاد']
@@ -67,7 +68,7 @@ class NameExtractor:
 
         return full_names
 
-    def extract_name(self, text):
+    def extract_name_change(self, text):
         match = re.search(self.change_pattern, text)
         if match:
             return match.group(4).strip()
@@ -76,16 +77,17 @@ class NameExtractor:
 
 
 if __name__ == '__main__':
+    name_extractor = NameExtractor()
+
     text = ('به المیرا و سوسن بگو آقای علی مردانی و دکتر پردیس مومنی و آقای مهندس فراهانی هم هستند. مهندس نیکبخت هم '
             'آمدند و آقای مهدی علیزاده چون خانم لویزانی هم زنگ زده بودند نتوانستند بیایند و خانم دکتر محبی هم خوب اند')
-    name_extractor = NameExtractor()
-    full_names = name_extractor.extract_names(text, name_extractor.words_women, name_extractor.words_men)
+    full_names = name_extractor.extract_names(text)
     print(full_names)
 
     text = 'به مهندس امیربیگی بگو اسلاید ها تا 2 مهر باید تموم بشه '
-    full_names = name_extractor.extract_names(text, name_extractor.words_women, name_extractor.words_men)
+    full_names = name_extractor.extract_names(text)
     print(full_names)
 
     text = 'مسئولیت به مریم و بیتا منتقل شد'
-    new_name = name_extractor.extract_name(text)
+    new_name = name_extractor.extract_name_change(text)
     print(new_name)

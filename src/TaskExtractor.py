@@ -6,6 +6,7 @@ from src.NameExtractor import NameExtractor
 from src.StatusChecker import StatusChecker
 from src.TitleExtractor import TitleExtractor
 
+import os
 
 class TaskExtractor:
     OUTPUT_DIR = '../output/'
@@ -67,5 +68,8 @@ class TaskExtractor:
     def export_json(self):
         json_data = json.dumps(self.task, indent=2, ensure_ascii=False)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        if not os.path.exists(self.OUTPUT_DIR):
+            os.makedirs(self.OUTPUT_DIR)
+
         with open(self.OUTPUT_DIR + timestamp + '.json', 'w', encoding='utf-8') as file:
             file.write(json_data)

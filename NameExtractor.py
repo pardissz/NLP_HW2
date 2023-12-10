@@ -1,75 +1,77 @@
 """
 Crawled from https://shadima.com/%D8%A7%D8%B3%D9%85-%D9%BE%D8%B3%D8%B1/
 Thanks!!
-
-
-
-with open('Girls.txt', 'r', encoding='utf-8') as f:
-    text = f.read()
-
-new_text = text.replace(' ', '')
-
-with open('Modified_Girls.txt', 'w', encoding='utf-8') as f:
-    f.write(new_text)
 """
-with open('Modified_Girls.txt', 'r', encoding='utf-8') as f:
-    lines_women = f.readlines()
-with open('Boys.txt', 'r', encoding='utf-8') as f:
-    lines_men = f.readlines()
-
-words_men = [line.split("\t")[0] for line in lines_men]
-words_women = [line.split("\t")[0] for line in lines_women]
-
-import re
 
 
-def extract_names(text, women_names, men_names):
-    full_names = []
-    words = text.split()
-    women_prefixes = ['خانم','مهندس','دکتر','استاد']
-    men_prefixes = ['آقای','آقا','دکتر','استاد','مهندس','جناب']
-    all_prefixes = women_prefixes + men_prefixes
-    i = 0
-    while i < len(words):
-        if words[i].lower() in women_prefixes:
-            if i < len(words) - 1 and words[i+1].lower() not in all_prefixes:
-                if words[i+1].lower() in women_names:
-                    if i < len(words) - 2:
-                        full_names.append(words[i] + ' ' + words[i+1] + ' ' + words[i+2])
-                        i += 1
+class NameExtractor:
+    me_pronoun = ['من', 'می کنم', 'می‌کنم', 'می دهم', 'میدهم']
+    you_pronoun = ['تو', 'برو', 'بکن', 'بخر', 'بده']
+
+    def __init__(self):
+        with open('Modified_Girls.txt', 'r', encoding='utf-8') as f:
+            self.lines_women = f.readlines()
+        with open('Boys.txt', 'r', encoding='utf-8') as f:
+            self.lines_men = f.readlines()
+
+        self.words_men = [line.split("\t")[0] for line in self.lines_men]
+        self.words_women = [line.split("\t")[0] for line in self.lines_women]
+
+    @staticmethod
+    def extract_names(text, women_names, men_names):
+        full_names = []
+        words = text.split()
+        women_prefixes = ['خانم', 'مهندس', 'دکتر', 'استاد']
+        men_prefixes = ['آقای', 'آقا', 'دکتر', 'استاد', 'مهندس', 'جناب']
+        all_prefixes = women_prefixes + men_prefixes
+        i = 0
+        while i < len(words):
+            if words[i].lower() in women_prefixes:
+                if i < len(words) - 1 and words[i + 1].lower() not in all_prefixes:
+                    if words[i + 1].lower() in women_names:
+                        if i < len(words) - 2:
+                            full_names.append(words[i] + ' ' + words[i + 1] + ' ' + words[i + 2])
+                            i += 1
+                        else:
+                            full_names.append(words[i] + ' ' + words[i + 1])
                     else:
-                        full_names.append(words[i] + ' ' + words[i+1])
-                else:
-                    full_names.append(words[i] + ' ' + words[i+1])
-        elif words[i].lower() in men_prefixes:
-            if i < len(words) - 1 and words[i+1].lower() not in all_prefixes:
-                if words[i+1].lower() in men_names:
-                    if i < len(words) - 2:
-                        full_names.append(words[i] + ' ' + words[i+1] + ' ' + words[i+2])
-                        i += 1
+                        full_names.append(words[i] + ' ' + words[i + 1])
+            elif words[i].lower() in men_prefixes:
+                if i < len(words) - 1 and words[i + 1].lower() not in all_prefixes:
+                    if words[i + 1].lower() in men_names:
+                        if i < len(words) - 2:
+                            full_names.append(words[i] + ' ' + words[i + 1] + ' ' + words[i + 2])
+                            i += 1
+                        else:
+                            full_names.append(words[i] + ' ' + words[i + 1])
                     else:
-                        full_names.append(words[i] + ' ' + words[i+1])
-                else:
-                    full_names.append(words[i] + ' ' + words[i+1])
-        elif words[i].lower() in women_names or words[i].lower() in men_names:
-            full_names.append(words[i])
-        i += 1
+                        full_names.append(words[i] + ' ' + words[i + 1])
+            elif words[i].lower() in women_names or words[i].lower() in men_names:
+                full_names.append(words[i])
+            i += 1
 
-    return full_names
-text = "به المیرا و سوسن بگو آقای علی مردانی و دکتر پردیس مومنی و آقای مهندس فراهانی هم هستند. مهندس نیکبخت هم آمدند و آقای مهدی علیزاده چون خانم لویزانی هم زنگ زده بودند نتوانستند بیایند و خانم دکتر محبی هم خوب اند"
-text="به مهندس امیربیگی بگو اسلاید ها تا 2 مهر باید تموم بشه "
-full_names=extract_names(text, words_women, words_men)
-me_prounoun=['من','می کنم','می‌کنم','می دهم','میدهم']
-you_prounoun=['تو','برو','بکن','بخر','بده']
-words = text.split()
-if not full_names:
-    for word in words:
-        if word in me_prounoun:
-            full_names.append("گوینده")
-            break
-        if word in you_prounoun:
-            full_names.append("شنونده")
-            break
-if not full_names:
-    full_names.append("نامعلوم")
-print(full_names)
+        words = text.split()
+        if not full_names:
+            for word in words:
+                if word in NameExtractor.me_pronoun:
+                    full_names.append("گوینده")
+                    break
+                if word in NameExtractor.you_pronoun:
+                    full_names.append("شنونده")
+                    break
+        if not full_names:
+            full_names.append("نامعلوم")
+
+        return full_names
+
+
+if __name__ == '__main__':
+    text = ("به المیرا و سوسن بگو آقای علی مردانی و دکتر پردیس مومنی و آقای مهندس فراهانی هم هستند. مهندس نیکبخت هم "
+            "آمدند و آقای مهدی علیزاده چون خانم لویزانی هم زنگ زده بودند نتوانستند بیایند و خانم دکتر محبی هم خوب اند")
+    name_extractor = NameExtractor()
+    full_names = NameExtractor.extract_names(text, name_extractor.words_women, name_extractor.words_men)
+    print(full_names)
+
+    text = "به مهندس امیربیگی بگو اسلاید ها تا 2 مهر باید تموم بشه "
+    full_names = NameExtractor.extract_names(text, name_extractor.words_women, name_extractor.words_men)
+    print(full_names)

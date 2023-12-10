@@ -16,12 +16,12 @@ class TitleExtractor:
         ]
 
         self.subtask_patterns = [
-            r'ابتدا\s+(.*?)\s+و\s+سپس\s+(.*)',
-            r'اول\s+(.*?)\s+و بعد\s+(.*)',
-            r'اول\s+(.*?)\s+بعد\s+(.*)',
-            r'در مرحله اول\s+(.*?)\s+سپس\s+(.*)',
-            r'از یک سو\s+(.*?)\s+و از سوی دیگر\s+(.*)',
-            r'شروع با\s+(.*?)\s+و در نهایت\s+(.*)',
+            r'ابتدا\s+(.*?)\s+و\s+سپس\s+([^\.و]+)',
+            r'اول\s+(.*?)\s+و بعد\s+([^\.و]+)',
+            r'اول\s+(.*?)\s+بعد\s+([^\.و]+)',
+            r'در مرحله اول\s+(.*?)\s+سپس\s+([^\.و]+)',
+            r'از یک سو\s+(.*?)\s+و از سوی دیگر\s+([^\.و]+)',
+            r'شروع با\s+(.*?)\s+و در نهایت\s+([^\.و]+)',
         ]
 
         self.change_patterns = [
@@ -43,7 +43,7 @@ class TitleExtractor:
                 return match.groups()
         return []
 
-    def extract_changes(self, text):
+    def extract_title_change(self, text):
         for pattern in self.change_patterns:
             match = re.search(pattern, text)
             if match:

@@ -1,7 +1,7 @@
 import re
 
 
-class TaskExtractor:
+class TitleExtractor:
     def __init__(self):
         self.title_patterns = [
             r'باید\s+(.*?)\s+را',
@@ -52,13 +52,13 @@ class TaskExtractor:
 
 
 if __name__ == '__main__':
-    task_extractor = TaskExtractor()
+    title_extractor = TitleExtractor()
 
     text = ('باید تسک حل تمرین دوم درس را در یک آذر شروع کنیم و تا ده آذر تمام کنیم. برای اینکار باید اول موضوع را '
             'مشخص کنیم و بعد پیادەسازی را انجام دهیم.')
 
-    title = task_extractor.extract_title(text)
-    subtasks = task_extractor.extract_subtasks(text)
+    title = title_extractor.extract_title(text)
+    subtasks = title_extractor.extract_subtasks(text)
 
     print('title:', title)
     print('subtasks:', subtasks)

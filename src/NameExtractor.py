@@ -17,6 +17,9 @@ class NameExtractor:
 
         self.me_pronoun = ['من', 'می کنم', 'می‌کنم', 'می دهم', 'میدهم']
         self.you_pronoun = ['تو', 'برو', 'بکن', 'بخر', 'بده']
+        self.change_pattern = (
+            r'(انجام دهنده|مسئول|افراد مسئول|مسئولیت).*?(کار|تسک)?.*?(منتقل شد|انتقال یافت|عوض شد|تغییر '
+            r'کرد)?.*?به (.*?)(منتقل شد|انتقال یافت|عوض شد|تغییر کرد)')
 
     def extract_names(self, text, women_names, men_names):
         full_names = []
@@ -65,9 +68,7 @@ class NameExtractor:
         return full_names
 
     def extract_name(self, text):
-        pattern = (r'(انجام دهنده|مسئول|افراد مسئول|مسئولیت).*?(کار|تسک)?.*?(منتقل شد|انتقال یافت|عوض شد|تغییر '
-                   r'کرد)?.*?به (.*?)(منتقل شد|انتقال یافت|عوض شد|تغییر کرد)')
-        match = re.search(pattern, text)
+        match = re.search(self.change_pattern, text)
         if match:
             return match.group(4).strip()
         else:

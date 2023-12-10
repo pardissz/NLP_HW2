@@ -22,6 +22,10 @@ class DateExtractor:
                                 'سی و یکم']
         self.farsi_numbers = ['۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', '۱۰', '۱۱', '۱۲', '۱۳', '۱۴', '۱۵', '۱۶',
                               '۱۷', '۱۸', '۱۹', '۲۰', '۲۱', '۲۲', '۲۳', '۲۴', '۲۵', '۲۶', '۲۷', '۲۸', '۲۹', '۳۰', '۳۱']
+        self.start_time_change_pattern = (r'(شروع|استارت).*?(کار|تسک|ددلاین)?.*?(منتقل شد|انتقال یافت|عوض شد|تغییر '
+                                          r'کرد)?.*?به (.*?)(منتقل شد|انتقال یافت|عوض شد|تغییر کرد)')
+        self.end_time_change_pattern = (r'(پایان|ددلاین|مهلت|اتمام).*?(کار|تسک|ددلاین)?.*?(منتقل شد|انتقال یافت|عوض '
+                                        r'شد|تغییر کرد)?.*?به (.*?)(اضافه شد|منتقل شد|انتقال یافت|عوض شد|تغییر کرد)')
 
     def extract_date(self, text, is_start: bool):
         numbers = self.spec_numbers + self.farsi_numbers + self.ordinal_numbers
@@ -105,19 +109,15 @@ class DateExtractor:
                             return prev_word
         return ''
 
-    def extract_start(self, text):
-        pattern = (r'(شروع|استارت).*?(کار|تسک|ددلاین)?.*?(منتقل شد|انتقال یافت|عوض شد|تغییر کرد)?.*?به (.*?)(منتقل '
-                   r'شد|انتقال یافت|عوض شد|تغییر کرد)')
-        match = re.search(pattern, text)
+    def extract_start_time_change(self, text):
+        match = re.search(self.start_time_change_pattern, text)
         if match:
             return match.group(4).strip()
         else:
             return None
 
-    def extract_ending(self, text):
-        pattern = (r'(پایان|ددلاین|مهلت|اتمام).*?(کار|تسک|ددلاین)?.*?(منتقل شد|انتقال یافت|عوض شد|تغییر کرد)?.*?به ('
-                   r'.*?)(اضافه شد|منتقل شد|انتقال یافت|عوض شد|تغییر کرد)')
-        match = re.search(pattern, text)
+    def extract_end_time_change(self, text):
+        match = re.search(self.end_time_change_pattern, text)
         if match:
             return match.group(4).strip()
         else:
@@ -131,6 +131,6 @@ if __name__ == '__main__':
     print(date_extractor.extract_date(text, False))
 
     text = 'شروع کار به 7 مهر منتقل شد'
-    print(date_extractor.extract_start(text))
+    print(date_extractor.extract_start_time_change(text))
     text = 'ددلاین کار به 5 مهر منتقل شد'
-    print(date_extractor.extract_ending(text))
+    print(date_extractor.extract_end_time_change(text))

@@ -1,13 +1,11 @@
-'''
+"""
 Crawled from https://shadima.com/%D8%A7%D8%B3%D9%85-%D9%BE%D8%B3%D8%B1/
 Thanks!!
-'''
+"""
+import re
 
 
 class NameExtractor:
-    me_pronoun = ['من', 'می کنم', 'می‌کنم', 'می دهم', 'میدهم']
-    you_pronoun = ['تو', 'برو', 'بکن', 'بخر', 'بده']
-
     def __init__(self):
         with open('Modified_Girls.txt', 'r', encoding='utf-8') as f:
             self.lines_women = f.readlines()
@@ -17,8 +15,10 @@ class NameExtractor:
         self.words_men = [line.split('\t')[0] for line in self.lines_men]
         self.words_women = [line.split('\t')[0] for line in self.lines_women]
 
-    @staticmethod
-    def extract_names(text, women_names, men_names):
+        self.me_pronoun = ['من', 'می کنم', 'می‌کنم', 'می دهم', 'میدهم']
+        self.you_pronoun = ['تو', 'برو', 'بکن', 'بخر', 'بده']
+
+    def extract_names(self, text, women_names, men_names):
         full_names = []
         words = text.split()
         women_prefixes = ['خانم', 'مهندس', 'دکتر', 'استاد']
@@ -53,10 +53,10 @@ class NameExtractor:
         words = text.split()
         if not full_names:
             for word in words:
-                if word in NameExtractor.me_pronoun:
+                if word in self.me_pronoun:
                     full_names.append('گوینده')
                     break
-                if word in NameExtractor.you_pronoun:
+                if word in self.you_pronoun:
                     full_names.append('شنونده')
                     break
         if not full_names:
@@ -64,14 +64,27 @@ class NameExtractor:
 
         return full_names
 
+    def extract_name(self, text):
+        pattern = (r'(انجام دهنده|مسئول|افراد مسئول|مسئولیت).*?(کار|تسک)?.*?(منتقل شد|انتقال یافت|عوض شد|تغییر '
+                   r'کرد)?.*?به (.*?)(منتقل شد|انتقال یافت|عوض شد|تغییر کرد)')
+        match = re.search(pattern, text)
+        if match:
+            return match.group(4).strip()
+        else:
+            return None
+
 
 if __name__ == '__main__':
     text = ('به المیرا و سوسن بگو آقای علی مردانی و دکتر پردیس مومنی و آقای مهندس فراهانی هم هستند. مهندس نیکبخت هم '
             'آمدند و آقای مهدی علیزاده چون خانم لویزانی هم زنگ زده بودند نتوانستند بیایند و خانم دکتر محبی هم خوب اند')
     name_extractor = NameExtractor()
-    full_names = NameExtractor.extract_names(text, name_extractor.words_women, name_extractor.words_men)
+    full_names = name_extractor.extract_names(text, name_extractor.words_women, name_extractor.words_men)
     print(full_names)
 
     text = 'به مهندس امیربیگی بگو اسلاید ها تا 2 مهر باید تموم بشه '
-    full_names = NameExtractor.extract_names(text, name_extractor.words_women, name_extractor.words_men)
+    full_names = name_extractor.extract_names(text, name_extractor.words_women, name_extractor.words_men)
     print(full_names)
+
+    text = 'مسئولیت به مریم و بیتا منتقل شد'
+    new_name = name_extractor.extract_name(text)
+    print(new_name)
